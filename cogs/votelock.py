@@ -32,15 +32,19 @@ class votelock(commands.Cog):
             overwrite.send_messages = False
             await ctx.channel.set_permissions(ctx.guild.default_role, overwrite=overwrite)
             await ctx.send(':red_circle: **Channel locked.** This bot is offline, please use one of the other bots.')
-            down = discord.Embed(title="Bot Is Down!", description=f"Many users have been experiencing bot disconnection, meaning that they cannot complete their trades. This means the bot has crashed; therefore, this channel has been locked.\n\n\n**Do not DM anyone about the bot. Do not ask when the bot will be up.**\n\n\nRemember, this is a free service that nobody else offers. This is also something that the other sysbot creators said would be impossible to make.\n\n\nThank you for waiting patiently.", colour=discord.Colour.orange())
-            down.set_footer(text="Failure to follow bolded line will result in a ban.")  
+            down = discord.Embed(
+                title="Bot Is Down!",
+                description='Many users have been experiencing bot disconnection, meaning that they cannot complete their trades. This means the bot has crashed; therefore, this channel has been locked.\n\n\n**Do not DM anyone about the bot. Do not ask when the bot will be up.**\n\n\nRemember, this is a free service that nobody else offers. This is also something that the other sysbot creators said would be impossible to make.\n\n\nThank you for waiting patiently.',
+                colour=discord.Colour.orange(),
+            )
+
+            down.set_footer(text="Failure to follow bolded line will result in a ban.")
             await ctx.send(embed = down)
-            while(True):
-                if votes != 0 or voted != 0:
-                    votes.clear()
-                    voted.clear()
-                else:
+            while True:
+                if votes == 0 and voted == 0:
                     return
+                votes.clear()
+                voted.clear()
 
 # {-- Admin Commands --}
     @commands.command()

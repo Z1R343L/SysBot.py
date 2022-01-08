@@ -18,82 +18,76 @@ class moderation(commands.Cog):
     @commands.command()
     @commands.has_permissions(kick_members=True)
     async def kick(self, ctx, member: discord.Member, *, reason = None):
-        if reason == None:
+        if reason is None:
             reason = 'No reason given'
         author = ctx.message.author
-        if member:
-            if author.top_role.position < member.top_role.position + 1:
-                return await ctx.send("You cannot kick members that have a higher role than you.")
+        if member and author.top_role.position < member.top_role.position + 1:
+            return await ctx.send("You cannot kick members that have a higher role than you.")
         if member.permissions_in(ctx.channel).kick_members:
             return await ctx.send("That user is a mod/admin.")
-        else:
+        try:
+            guild = self.client.get_guild(ctx.guild.id)
             try:
-                guild = self.client.get_guild(ctx.guild.id)
-                try:
-                    invitelink = ""
-                    i = 0
-                    while invitelink == "":
-                        channel = guild.text_channels[i]
-                        link = await channel.create_invite(max_age=0,max_uses=0)
-                        invitelink = str(link)
-                        i += 1
-                except: 
-                    invitelink = "Unable to create an invite."
-                await member.send(f"You have been kicked from **{guild}**.\nThe reason given was: `{reason}`.\nAdditional kicks will result in a ban.\n{invitelink}")
-            except discord.Forbidden:
-                pass
-            await member.kick(reason=reason)
-            await ctx.send(f"{member.name} has been kicked for `{reason}`.")
+                invitelink = ""
+                i = 0
+                while invitelink == "":
+                    channel = guild.text_channels[i]
+                    link = await channel.create_invite(max_age=0,max_uses=0)
+                    invitelink = str(link)
+                    i += 1
+            except: 
+                invitelink = "Unable to create an invite."
+            await member.send(f"You have been kicked from **{guild}**.\nThe reason given was: `{reason}`.\nAdditional kicks will result in a ban.\n{invitelink}")
+        except discord.Forbidden:
+            pass
+        await member.kick(reason=reason)
+        await ctx.send(f"{member.name} has been kicked for `{reason}`.")
   
     @commands.command()
     @commands.has_permissions(ban_members=True)
     async def ban(self, ctx, member: discord.Member, reason = None):
-        if reason == None:
+        if reason is None:
             reason = 'No reason given'
         author = ctx.message.author
-        if member:
-            if author.top_role.position < member.top_role.position + 1:
-                return await ctx.send("You cannot ban members that have a higher role than you.")
+        if member and author.top_role.position < member.top_role.position + 1:
+            return await ctx.send("You cannot ban members that have a higher role than you.")
         if member.permissions_in(ctx.channel).ban_members:
             return await ctx.send("That user is a mod/admin.")
-        else:
-            try:
-                guild = self.client.get_guild(ctx.guild.id)
-                await member.send(f"You have been banned from **{guild}**.\nThe reason given was: `{reason}`.")
-            except discord.Forbidden:
-                pass
-            await member.ban(reason=reason)
-            await ctx.send(f"{member.name} has been banned for `{reason}`.")
+        try:
+            guild = self.client.get_guild(ctx.guild.id)
+            await member.send(f"You have been banned from **{guild}**.\nThe reason given was: `{reason}`.")
+        except discord.Forbidden:
+            pass
+        await member.ban(reason=reason)
+        await ctx.send(f"{member.name} has been banned for `{reason}`.")
   
     @commands.command()
     @commands.has_permissions(ban_members=True)
     async def shareban(self, ctx, member: discord.Member, *, reason = None):
-        if reason == None:
+        if reason is None:
             reason = 'No reason given'
         author = ctx.message.author
-        if member:
-            if author.top_role.position < member.top_role.position + 1:
-                return await ctx.send("You cannot ban members that have a higher role than you.")
+        if member and author.top_role.position < member.top_role.position + 1:
+            return await ctx.send("You cannot ban members that have a higher role than you.")
         if member.permissions_in(ctx.channel).ban_members:
             return await ctx.send("That user is a mod/admin.")
-        else:
-            try:
-                guild = self.client.get_guild(ctx.guild.id)
-                await member.send(f"You have been banned from **{guild}**.\nThe reason given was: `{reason}`.")
-            except discord.Forbidden:
-                pass
-            await member.ban(reason=reason)
-            await ctx.send(f"{member.name} has been banned for `{reason}`.")
-            for chan in channels:
-                channel = self.client.get_channel(chan)
-                guild = self.client.get_guild(self.client.guild.name)
-                embed = discord.Embed(title=f'{member.name} Has Been Banned', description=f"Server: {guild}\nReason: {reason}\nBy: {author.name}", color=0xD60FBB)
-                await channel.send(embed = embed)
-                ask = await channel.send(f"React with a hammer if you would you like to ban {member.name} from your server?")
-                reaction = await self.client.wait_for_reaction(['\N{hammer}'], ask)
-                sharereason = "Shared Banned:" + reason
-                await member.ban(reason=sharereason)
-                await channel.send(f"You responded with {reaction.emoji} so {member.name} was banned from this guild.")
+        try:
+            guild = self.client.get_guild(ctx.guild.id)
+            await member.send(f"You have been banned from **{guild}**.\nThe reason given was: `{reason}`.")
+        except discord.Forbidden:
+            pass
+        await member.ban(reason=reason)
+        await ctx.send(f"{member.name} has been banned for `{reason}`.")
+        for chan in channels:
+            channel = self.client.get_channel(chan)
+            guild = self.client.get_guild(self.client.guild.name)
+            embed = discord.Embed(title=f'{member.name} Has Been Banned', description=f"Server: {guild}\nReason: {reason}\nBy: {author.name}", color=0xD60FBB)
+            await channel.send(embed = embed)
+            ask = await channel.send(f"React with a hammer if you would you like to ban {member.name} from your server?")
+            reaction = await self.client.wait_for_reaction(['\N{hammer}'], ask)
+            sharereason = "Shared Banned:" + reason
+            await member.ban(reason=sharereason)
+            await channel.send(f"You responded with {reaction.emoji} so {member.name} was banned from this guild.")
 
     @commands.command()
     @commands.guild_only()
@@ -136,14 +130,13 @@ class moderation(commands.Cog):
         role = discord.utils.find(lambda m: rolename.lower() in m.name.lower(), ctx.message.guild.roles)
         if not role:
             return await ctx.send('That role does not exist.')
-        else:
-            await member.remove_roles(role)
-            await ctx.send(f'Removed: `{role.name}`')
+        await member.remove_roles(role)
+        await ctx.send(f'Removed: `{role.name}`')
 
     @commands.command()
     @commands.has_permissions(manage_roles=True)
     async def mute(self, ctx, member:discord.Member, duration, *, reason = None):
-        if reason == None:
+        if reason is None:
             reason = 'No reason given'
         unit = duration[-1]
         if unit == 's':
@@ -167,7 +160,7 @@ class moderation(commands.Cog):
     @commands.command()
     @commands.has_permissions(manage_roles=True)
     async def unmute(self, ctx, member:discord.Member, *, reason = None):
-        if reason == None:
+        if reason is None:
             reason = 'No reason given'
         for channel in ctx.message.guild.channels:
             await channel.set_permissions(member, overwrite=None, reason=reason)

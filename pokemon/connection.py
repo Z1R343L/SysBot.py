@@ -25,20 +25,20 @@ serv.settimeout(15)
 try:
     serv.connect((switchip, switchport))
     console.print(f"Successfully connected to {switchip}:{switchport}.", style="green")
-    
+
     switch(serv, "detachController")
     switch(serv, "controllerType 1")
 
     switch(serv, "getTitleID")
     title = serv.recv(689)
-    title = title[0:-1]
+    title = title[:-1]
     title = str(title,'utf-8')
-    if title ==  bd or title == sp:
-        game = "BDSP"    
-    elif title ==  sw or title == sh:
-        game = "SWSH"  
-    elif title ==  p or title == e:
-        game = "LGPE"  
+    if title in [bd, sp]:
+        game = "BDSP"
+    elif title in [sw, sh]:
+        game = "SWSH"
+    elif title in [p, e]:
+        game = "LGPE"
     else:
         game = "Pokemon"
 
@@ -47,7 +47,9 @@ try:
         console.print("Switch screen was turned off.", style="green")
 except socket.error:
     console.print(f"Unable to connect to {switchip}:{switchport}.", style="red")
-    console.print(f"\nClick here to follow the connection troubleshooting guide.\nhttps://github.com/6A-Realm/SysBot.py/wiki/Connection-Issues")
+    console.print(
+        '\nClick here to follow the connection troubleshooting guide.\nhttps://github.com/6A-Realm/SysBot.py/wiki/Connection-Issues'
+    )
 
 class connection(commands.Cog):
     def __init__(self, client):

@@ -19,16 +19,14 @@ class pkhex(commands.Cog):
     @commands.guild_only()
     async def pk8(self, ctx, *, query):
         check = False
-        for filepath in glob.glob(f"Files/pk8/*.pk8"):
+        for filepath in glob.glob('Files/pk8/*.pk8'):
             if (self.namek8(filepath).lower() == query.lower()):
                 await ctx.send(file=discord.File(filepath))
                 check = True
         await asyncio.sleep(10)
-        if check == False:
+        if not check:
             await ctx.send("The `pk8` for this pokemon does not exist yet.")
-            return
-        else:
-            return
+        return
 
     @commands.command()
     @commands.guild_only()

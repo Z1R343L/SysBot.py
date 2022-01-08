@@ -21,12 +21,15 @@ class queued(commands.Cog):
     async def list(self, ctx):
         list = []
         enter = '\n'
-        counter = 0
-        for x in queuelist:
+        for counter, x in enumerate(queuelist, start=1):
             user = self.client.get_user(x.id)
-            counter += 1
             list.append(f"{counter}) {user.name}")
-        embed = discord.Embed(title="Queue List", description=f"{enter.join(y for y in list)}", colour=discord.Colour.blurple())
+        embed = discord.Embed(
+            title="Queue List",
+            description=f'{enter.join(iter(list))}',
+            colour=discord.Colour.blurple(),
+        )
+
         await ctx.send(embed = embed)
 
     @queue.group()

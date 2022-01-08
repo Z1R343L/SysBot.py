@@ -25,7 +25,7 @@ client = commands.Bot(
 async def event_ready():
     print(f"{botnickname} is connected to twitch.")
     ws = client._ws
-    await ws.send_privmsg(channel, f"/me echo notification.")
+    await ws.send_privmsg(channel, '/me echo notification.')
 
 @client.command()
 async def discord(ctx):
