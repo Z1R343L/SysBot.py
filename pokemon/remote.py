@@ -25,16 +25,15 @@ with open("advanced/sudo.yaml") as file:
 
 # Screen shot protocol
 async def protocol(ctx):
-    if screenshot == True:
-        await asyncio.sleep(1)
-        screen = pyautogui.screenshot()
-        screen.save(dir)
-        embed = discord.Embed(color=0xFFD700)
-        image = discord.File("res/screen.jpg", filename="screen.jpg")
-        embed.set_image(url="attachment://screen.jpg")
-        await ctx.send(file=image, embed=embed)
-    else:
+    if screenshot != True:
         return
+    await asyncio.sleep(1)
+    screen = pyautogui.screenshot()
+    screen.save(dir)
+    embed = discord.Embed(color=0xFFD700)
+    image = discord.File("res/screen.jpg", filename="screen.jpg")
+    embed.set_image(url="attachment://screen.jpg")
+    await ctx.send(file=image, embed=embed)
 
 # Cog 
 class remote(commands.Cog):
@@ -64,10 +63,10 @@ class remote(commands.Cog):
         singles = ["X", "A", "B", "Y", "PLUS", "MINUS", "HOME", "CAPTURE"]
         check = value.upper()
         if (check in singles):
-                for x in range(amount):
-                    switch(serv, f"click {check}")
-                    await asyncio.sleep(1)
-                await protocol(ctx)
+            for _ in range(amount):
+                switch(serv, f"click {check}")
+                await asyncio.sleep(1)
+            await protocol(ctx)
 
         elif check == "UP":
             for up in range(amount):
@@ -76,13 +75,13 @@ class remote(commands.Cog):
                 await asyncio.sleep(1)
             await protocol(ctx)
         elif check == "RIGHT":
-            for right in range(amount):
+            for _ in range(amount):
                 switch(serv, "setStick RIGHT 0x7FFF 0x0")
                 switch(serv, "setStick RIGHT 0x0 0x0")
                 await asyncio.sleep(1)
             await protocol(ctx)
         elif check == "DOWN":
-            for down in range(amount):
+            for _ in range(amount):
                 switch(serv, "setStick RIGHT yVal -0x8000")
                 switch(serv, "setStick RIGHT yVal 0x0000")
                 await asyncio.sleep(1)
@@ -92,14 +91,14 @@ class remote(commands.Cog):
                 switch(serv, "setStick RIGHT -0x8000 0x0")
                 switch(serv, "setStick RIGHT 0x0 0x0")
             await protocol(ctx)
-            
+
         else:
             await ctx.send(embed=embed)
 
     @commands.command()
     @lock()
     async def spamb(self, ctx):
-        for b in range(15):
+        for _ in range(15):
             switch(serv, "click B")
             await asyncio.sleep(1)
         await protocol(ctx)
@@ -118,7 +117,7 @@ class remote(commands.Cog):
         if check == "inject":
             switch(serv, "getTitleID")
             title = serv.recv(689)
-            title = title[0:-1]
+            title = title[:-1]
             title = str(title,'utf-8')
             if title == bd or sp:
                 fileIn = open("Files/sysbot/inject.eb8", "rb")
@@ -131,16 +130,15 @@ class remote(commands.Cog):
         elif check == "dump":
             switch(serv, "getTitleID")
             title = serv.recv(689)
-            title = title[0:-1]
+            title = title[:-1]
             title = str(title,'utf-8')
             if title == bd or sp:
                 switch(serv, "pointerPeek 344 0x4E34DD0 0xB8 0x10 0xA0 0x20 0x20 0x20")
                 asyncio.sleep(0.5)
                 pokemonBytes = serv.recv(689)
-                pokemonBytes = pokemonBytes[0:-1]
-                fileOut = open("Files/sysbot/dump.eb8", "wb")
-                fileOut.write(binascii.unhexlify(pokemonBytes))
-                fileOut.close()
+                pokemonBytes = pokemonBytes[:-1]
+                with open("Files/sysbot/dump.eb8", "wb") as fileOut:
+                    fileOut.write(binascii.unhexlify(pokemonBytes))
                 await ctx.send("Pokemon dumped.")
             else:
                 ctx.send("Dumping not set up for this game yet.")
@@ -176,11 +174,11 @@ class remote(commands.Cog):
             embed=discord.Embed(description="Your switch screen was attempted to be captured.", color=0x17c70a)
             embed.set_footer(text="Note that this function does not work for LGPE.")
             await ctx.send(embed=embed)
-        elif check == "battery" or check == "percent":
+        elif check in ["battery", "percent"]:
             switch(serv, "charge")
             await asyncio.sleep(1)
             charge = serv.recv(689)
-            charge = charge[0:-1]
+            charge = charge[:-1]
             charge = str(charge,'utf-8')
             await ctx.send(f"{switchip}'s battery level is at {charge}%.")
         else:
@@ -215,7 +213,7 @@ class remote(commands.Cog):
         switch(serv, "pixelPeek")
         await asyncio.sleep(1)
         peek = serv.recv(1024)
-        peek = peek[0:-1]
+        peek = peek[:-1]
         print(peek)
         await ctx.send(peek)
         decode = base64.b64decode(peek)
@@ -232,7 +230,7 @@ class remote(commands.Cog):
     async def titleid(self, ctx): 
         switch(serv, "getTitleID")
         title = serv.recv(689)
-        title = title[0:-1]
+        title = title[:-1]
         title = str(title,'utf-8')
         await ctx.send(title)
 

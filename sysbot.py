@@ -75,17 +75,21 @@ async def on_ready():
         console.print('The bot will launch without sysbot commands.', style="blue")
 
 # Build Plugins List
-plugins = []
+plugins = [
+    "cogs." + filename[:-3]
+    for filename in os.listdir('./cogs')
+    if filename.endswith('.py')
+]
 
-for filename in os.listdir('./cogs'):
-    if filename.endswith('.py'):
-        plugins.append("cogs." + filename[:-3])
 
 for filename in os.listdir('./helper'):
-    if filename.endswith('.py'):
-        if not filename.startswith('names') and not filename.startswith('solver'):
-            plugins.append("helper." + filename[:-3])
-            
+    if (
+        filename.endswith('.py')
+        and not filename.startswith('names')
+        and not filename.startswith('solver')
+    ):
+        plugins.append("helper." + filename[:-3])
+
 # Load plugins
 if __name__ == '__main__':
     for x in plugins:

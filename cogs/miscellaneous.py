@@ -56,15 +56,16 @@ class miscellaneous(commands.Cog):
         embed.set_thumbnail(url="https://i.ytimg.com/vi/1WbOHrQfMlc/mqdefault.jpg")
         await ctx.send(embed=embed)
 
-    @commands.command() 
+    @commands.command()
     @commands.guild_only()
     async def languide(self, ctx):
-        embed=discord.Embed(title="How To Use LAN Sysbot", url="https://docs.google.com/document/d/e/2PACX-1vR9tpYmZ3qCbqOeZb1XwnNESAauTf9rVJVzJ1G22TkmGsVZf8LVJs-o-rNshKsYZuyZBdrdRDzTtsqH/pub", description=f"""
-        This is a [lan guide](https://docs.google.com/document/d/e/2PACX-1vR9tpYmZ3qCbqOeZb1XwnNESAauTf9rVJVzJ1G22TkmGsVZf8LVJs-o-rNshKsYZuyZBdrdRDzTtsqH/pub) on how to connect to LAN. 
-        Here are some helpful videos to get you started:
-        [LAN Installation on WINDOWS](https://www.youtube.com/watch?v=qQSQH6F6ogk) || By Optimisim247.
-        [LAN Installation on MAC](https://www.youtube.com/watch?v=nhC8qgjauL0&t=369s)
-        All bots are in the bots official [Pokemon LAN server](https://discord.gg/pkmn).""", color= ctx.author.color)
+        embed = discord.Embed(
+            title="How To Use LAN Sysbot",
+            url="https://docs.google.com/document/d/e/2PACX-1vR9tpYmZ3qCbqOeZb1XwnNESAauTf9rVJVzJ1G22TkmGsVZf8LVJs-o-rNshKsYZuyZBdrdRDzTtsqH/pub",
+            description='\x1f        This is a [lan guide](https://docs.google.com/document/d/e/2PACX-1vR9tpYmZ3qCbqOeZb1XwnNESAauTf9rVJVzJ1G22TkmGsVZf8LVJs-o-rNshKsYZuyZBdrdRDzTtsqH/pub) on how to connect to LAN. \x1f        Here are some helpful videos to get you started:\x1f        [LAN Installation on WINDOWS](https://www.youtube.com/watch?v=qQSQH6F6ogk) || By Optimisim247.\x1f        [LAN Installation on MAC](https://www.youtube.com/watch?v=nhC8qgjauL0&t=369s)\x1f        All bots are in the bots official [Pokemon LAN server](https://discord.gg/pkmn).',
+            color=ctx.author.color,
+        )
+
         embed.set_thumbnail(url="https://i.ytimg.com/vi/1WbOHrQfMlc/mqdefault.jpg")
         await ctx.send(embed=embed)
 

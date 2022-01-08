@@ -132,25 +132,24 @@ class friend(commands.Cog):
 
     @commands.command()
     async def fcode(self, ctx):
-        embed=discord.Embed(title=f'Your friend codes', description="Your saved friend codes are listed below.", color=ctx.author.color)
+        embed = discord.Embed(
+            title='Your friend codes',
+            description="Your saved friend codes are listed below.",
+            color=ctx.author.color,
+        )
+
         with open('res/friendcodes-switch.json', 'r') as f:
             codes = json.load(f)
         if str(ctx.message.author.id) in codes:
             embed.add_field(name="Switch:", value={codes[str(ctx.message.author.id)]}, inline=False)
-        else: 
-            pass
         with open('res/friendcodes-ds.json', 'r') as f:
             codes = json.load(f)
         if str(ctx.message.author.id) in codes:
             embed.add_field(name="DS::", value={codes[str(ctx.message.author.id)]}, inline=False)
-        else: 
-            pass        
         with open('res/friendcodes-home.json', 'r') as f:
             codes = json.load(f)
         if str(ctx.message.author.id) in codes:
             embed.add_field(name="Home:", value={codes[str(ctx.message.author.id)]}, inline=False)
-        else: 
-            pass
 
 
 def setup(client):
